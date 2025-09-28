@@ -1,7 +1,7 @@
-﻿using CSLOLTool.Models;
+﻿using System.Text.Json;
+using CSLOLTool.Models;
 using LCUSharp;
 using Microsoft.AspNetCore.SignalR.Client;
-using System.Text.Json;
 
 namespace CSLOLTool.Services;
 
@@ -12,10 +12,10 @@ public class LobbyService
     public HubConnection CreateConnection()
     {
         return new HubConnectionBuilder()
-             .WithUrl(_url)
-             .WithServerTimeout(TimeSpan.FromMilliseconds(120000))
-             .WithAutomaticReconnect([TimeSpan.Zero, TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(5)])
-             .Build();
+            .WithUrl(_url)
+            .WithServerTimeout(TimeSpan.FromMilliseconds(120000))
+            .WithAutomaticReconnect([TimeSpan.Zero, TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(5)])
+            .Build();
     }
 
     public async Task<LobbyData> ExtractLobbyInfoAsync()
@@ -24,7 +24,7 @@ public class LobbyService
 
         var json = await api.RequestHandler.GetJsonResponseAsync(HttpMethod.Get, "lol-lobby/v2/lobby");
 
-        using JsonDocument doc = JsonDocument.Parse(json);
+        using var doc = JsonDocument.Parse(json);
 
         var root = doc.RootElement;
 
@@ -32,20 +32,18 @@ public class LobbyService
 
         var localMember = new LocalMember
         {
-            Puuid = localMemberJson.GetProperty("puuid").GetString()!,
+            Puuid = localMemberJson.GetProperty("puuid").GetString()!
         };
 
         var membersJson = root.GetProperty("members");
         var members = new List<LobbyMember>();
 
         foreach (var memberJson in membersJson.EnumerateArray())
-        {
             members.Add(new LobbyMember
             {
                 Puuid = memberJson.GetProperty("puuid").GetString()!,
                 IsLeader = memberJson.GetProperty("isLeader").GetBoolean()
             });
-        }
 
         return new LobbyData
         {

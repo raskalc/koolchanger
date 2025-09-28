@@ -13,5 +13,8 @@ public class Champion
         return (obj as Champion)!.Id == Id;
     }
 
-    public override int GetHashCode() => Id.GetHashCode();
+    public override int GetHashCode()
+    {
+        return Id.GetHashCode();
+    }
 }

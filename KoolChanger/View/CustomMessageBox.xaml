@@ -11,49 +11,49 @@
         Title="CustomMessageBox">
     <Window.Resources>
         <Style x:Key="MaterialPurpleButton" TargetType="Button">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="#f5dbff"/>
-            <Setter Property="BorderBrush" Value="#f5dbff"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="FontFamily" Value="Segoe UI"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="FontWeight" Value="Medium"/>
-            <Setter Property="Padding" Value="16 8"/>
-            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="#f5dbff" />
+            <Setter Property="BorderBrush" Value="#f5dbff" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="FontFamily" Value="Segoe UI" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontWeight" Value="Medium" />
+            <Setter Property="Padding" Value="16 8" />
+            <Setter Property="Cursor" Value="Hand" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border x:Name="border" 
-                            Background="#66000000"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="4">
+                        <Border x:Name="border"
+                                Background="#66000000"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="4">
                             <Grid>
                                 <Border x:Name="RippleEffect"
-                                    Background="#20f5dbff"
-                                    Opacity="0"
-                                    CornerRadius="4"/>
+                                        Background="#20f5dbff"
+                                        Opacity="0"
+                                        CornerRadius="4" />
                                 <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"
-                                              RecognizesAccessKey="True"/>
+                                                  VerticalAlignment="Center"
+                                                  RecognizesAccessKey="True" />
                             </Grid>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="border" Property="Background" Value="#10f5dbff"/>
-                                <Setter TargetName="border" Property="BorderBrush" Value="#f5dbff"/>
+                                <Setter TargetName="border" Property="Background" Value="#10f5dbff" />
+                                <Setter TargetName="border" Property="BorderBrush" Value="#f5dbff" />
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="RippleEffect" Property="Opacity" Value="1"/>
-                                <Setter TargetName="RippleEffect" Property="Background" Value="#30f5dbff"/>
+                                <Setter TargetName="RippleEffect" Property="Opacity" Value="1" />
+                                <Setter TargetName="RippleEffect" Property="Background" Value="#30f5dbff" />
                             </Trigger>
                             <EventTrigger RoutedEvent="Button.Click">
                                 <BeginStoryboard>
                                     <Storyboard>
                                         <DoubleAnimation Storyboard.TargetName="RippleEffect"
-                                                     Storyboard.TargetProperty="Opacity"
-                                                     From="0.3" To="0"
-                                                     Duration="0:0:0.5"/>
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         From="0.3" To="0"
+                                                         Duration="0:0:0.5" />
                                     </Storyboard>
                                 </BeginStoryboard>
                             </EventTrigger>
@@ -66,9 +66,9 @@
     <Border CornerRadius="20" Background="#99000000" Padding="20">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
             <TextBlock x:Name="Header"
@@ -79,7 +79,7 @@
                        Text="Header"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
-                       Margin="10"/>
+                       Margin="10" />
             <TextBlock x:Name="Message"
                        Grid.Row="1"
                        Foreground="#f5dbff"
@@ -88,15 +88,16 @@
                        Text="Message"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
-                       Margin="0,10,0,20"/>
-            <StackPanel Grid.Row="2" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,10,0,0"
+                       Margin="0,10,0,20" />
+            <StackPanel Grid.Row="2" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center"
+                        Margin="0,10,0,0"
                         Height="30">
-                <Button x:Name="YesButton" Content="Yes" Width="100" Margin="10,0" 
+                <Button x:Name="YesButton" Content="Yes" Width="100" Margin="10,0"
                         Style="{StaticResource MaterialPurpleButton}"
-                        Click="YesButton_Click"/>
+                        Click="YesButton_Click" />
                 <Button x:Name="NoButton" Content="No" Width="100" Margin="10,0"
                         Style="{StaticResource MaterialPurpleButton}"
-                        Click="NoButton_Click"/>
+                        Click="NoButton_Click" />
             </StackPanel>
         </Grid>
     </Border>

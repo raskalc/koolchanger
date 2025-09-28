@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+﻿using System.Text.RegularExpressions;
 
 namespace CSLOLTool.Services;
 
 // made by random guy from lolru discord
 public static class Sanitizer
 {
-    static string CleanBase(string s)
+    private static string CleanBase(string s)
     {
         if (string.IsNullOrEmpty(s)) return "";
 
@@ -23,14 +18,14 @@ public static class Sanitizer
         return cleaned;
     }
 
-    static string EnsureUniquePath(string targetPath)
+    private static string EnsureUniquePath(string targetPath)
     {
         if (!File.Exists(targetPath) && !Directory.Exists(targetPath))
             return targetPath;
 
-        string dir = Path.GetDirectoryName(targetPath)!;
-        string name = Path.GetFileName(targetPath);
-        string baseName = name;
+        var dir = Path.GetDirectoryName(targetPath)!;
+        var name = Path.GetFileName(targetPath);
+        var baseName = name;
         string? ext = null;
 
         if (File.Exists(targetPath))
@@ -39,10 +34,10 @@ public static class Sanitizer
             baseName = Path.GetFileNameWithoutExtension(name);
         }
 
-        int i = 1;
+        var i = 1;
         while (true)
         {
-            string candidate = ext is null
+            var candidate = ext is null
                 ? Path.Combine(dir, $"{baseName}-{i}")
                 : Path.Combine(dir, $"{baseName}-{i}{ext}");
             if (!File.Exists(candidate) && !Directory.Exists(candidate))
@@ -57,13 +52,12 @@ public static class Sanitizer
             return;
 
         foreach (var file in Directory.EnumerateFiles(root, "*", SearchOption.AllDirectories))
-        {
             try
             {
-                string dir = Path.GetDirectoryName(file)!;
-                string ext = Path.GetExtension(file);
-                string cleanBase = CleanBase(Path.GetFileNameWithoutExtension(file));
-                string newPath = Path.Combine(dir, cleanBase + ext);
+                var dir = Path.GetDirectoryName(file)!;
+                var ext = Path.GetExtension(file);
+                var cleanBase = CleanBase(Path.GetFileNameWithoutExtension(file));
+                var newPath = Path.Combine(dir, cleanBase + ext);
 
                 if (!string.Equals(file, newPath, StringComparison.OrdinalIgnoreCase))
                 {
@@ -74,21 +68,19 @@ public static class Sanitizer
             catch (Exception)
             {
             }
-        }
 
         var allDirs = Directory.EnumerateDirectories(root, "*", SearchOption.AllDirectories);
         var dirsSorted = new List<string>(allDirs);
         dirsSorted.Sort((a, b) => b.Length.CompareTo(a.Length));
 
         foreach (var dirPath in dirsSorted)
-        {
             try
             {
-                string parent = Path.GetDirectoryName(dirPath)!;
-                string clean = CleanBase(Path.GetFileName(dirPath));
+                var parent = Path.GetDirectoryName(dirPath)!;
+                var clean = CleanBase(Path.GetFileName(dirPath));
                 if (string.IsNullOrEmpty(clean)) clean = "folder";
 
-                string newPath = Path.Combine(parent, clean);
+                var newPath = Path.Combine(parent, clean);
 
                 if (!string.Equals(dirPath, newPath, StringComparison.OrdinalIgnoreCase))
                 {
@@ -99,18 +91,18 @@ public static class Sanitizer
             catch (Exception)
             {
             }
-        }
+
         try
         {
-            string? parent = Path.GetDirectoryName(root);
+            var parent = Path.GetDirectoryName(root);
             if (!string.IsNullOrEmpty(parent))
             {
-                string clean = CleanBase(Path.GetFileName(root));
+                var clean = CleanBase(Path.GetFileName(root));
                 if (string.IsNullOrEmpty(clean)) clean = "root";
-                string newRoot = Path.Combine(parent, clean);
+                var newRoot = Path.Combine(parent, clean);
                 if (!string.Equals(root, newRoot, StringComparison.OrdinalIgnoreCase))
                 {
-                    string unique = EnsureUniquePath(newRoot);
+                    var unique = EnsureUniquePath(newRoot);
                     Directory.Move(root, unique);
                 }
             }

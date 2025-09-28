@@ -18,17 +18,14 @@ public static class RiotPathDetector
         var data = JsonSerializer.Deserialize<RiotClientInstalls>(json);
 
         if (data?.associated_client != null)
-        {
             foreach (var kv in data.associated_client)
             {
-                var path =  kv.Key.TrimEnd('\\', '/');
+                var path = kv.Key.TrimEnd('\\', '/');
                 return Path.Combine(path, "Game").Replace("/", "\\");
             }
-        }
 
         return null;
     }
+
     private record RiotClientInstalls(Dictionary<string, string> associated_client, string rc_default);
 }
-
-

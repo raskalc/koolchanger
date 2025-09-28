@@ -1,30 +1,31 @@
-﻿using CSLOLTool.Models;
-using System.IO.Compression;
+﻿using System.IO.Compression;
 using System.Text.RegularExpressions;
 
 namespace CSLOLTool.Services;
+
 public class UpdateService
 {
-    public event Action<string>? OnUpdating;
     public ChampionService _championService = new();
     public SkinService _skinService = new();
+    public event Action<string>? OnUpdating;
+
     public async Task DownloadSkins()
     {
-        string repoName = "lol-skins";
-        string branch = "main";
-        string zipUrl = $"https://github.com/darkseal-org/{repoName}/archive/refs/heads/{branch}.zip";
+        var repoName = "lol-skins";
+        var branch = "main";
+        var zipUrl = $"https://github.com/darkseal-org/{repoName}/archive/refs/heads/{branch}.zip";
 
-        string tempDir = Path.Combine(Path.GetTempPath(), $"lolskins-{Guid.NewGuid()}");
-        string zipPath = Path.Combine(tempDir, "repo.zip");
-        string extractPath = Path.Combine(tempDir, "extracted");
-        string targetDir = Path.Combine(Directory.GetCurrentDirectory(), "skins");
+        var tempDir = Path.Combine(Path.GetTempPath(), $"lolskins-{Guid.NewGuid()}");
+        var zipPath = Path.Combine(tempDir, "repo.zip");
+        var extractPath = Path.Combine(tempDir, "extracted");
+        var targetDir = Path.Combine(Directory.GetCurrentDirectory(), "skins");
 
         try
         {
             Directory.CreateDirectory(tempDir);
             OnUpdating?.Invoke("Downloading skins repo...");
 
-            using (HttpClient client = new HttpClient())
+            using (var client = new HttpClient())
             using (var response = await client.GetAsync(zipUrl))
             {
                 response.EnsureSuccessStatusCode();
@@ -35,7 +36,7 @@ public class UpdateService
             OnUpdating?.Invoke("Unzipping skins repo...");
             ZipFile.ExtractToDirectory(zipPath, extractPath);
 
-            string extractedRepoPath = Path.Combine(extractPath, $"{repoName}-{branch}", "skins");
+            var extractedRepoPath = Path.Combine(extractPath, $"{repoName}-{branch}", "skins");
 
             if (!Directory.Exists(extractedRepoPath))
             {
@@ -49,10 +50,10 @@ public class UpdateService
 
             Directory.CreateDirectory(targetDir);
 
-            foreach (string dir in Directory.GetDirectories(extractedRepoPath))
+            foreach (var dir in Directory.GetDirectories(extractedRepoPath))
             {
-                string folderName = Path.GetFileName(dir);
-                string dest = Path.Combine(targetDir, folderName);
+                var folderName = Path.GetFileName(dir);
+                var dest = Path.Combine(targetDir, folderName);
                 CopyDirectory(dir, dest);
             }
 
@@ -71,23 +72,25 @@ public class UpdateService
                 if (Directory.Exists(targetDir))
                     await ConvertToDev(targetDir);
             }
-            catch { }
+            catch
+            {
+            }
         }
     }
 
-    static void CopyDirectory(string sourceDir, string targetDir)
+    private static void CopyDirectory(string sourceDir, string targetDir)
     {
         Directory.CreateDirectory(targetDir);
 
-        foreach (string file in Directory.GetFiles(sourceDir))
+        foreach (var file in Directory.GetFiles(sourceDir))
         {
-            string dest = Path.Combine(targetDir, Path.GetFileName(file));
+            var dest = Path.Combine(targetDir, Path.GetFileName(file));
             File.Copy(file, dest, true);
         }
 
-        foreach (string dir in Directory.GetDirectories(sourceDir))
+        foreach (var dir in Directory.GetDirectories(sourceDir))
         {
-            string dest = Path.Combine(targetDir, Path.GetFileName(dir));
+            var dest = Path.Combine(targetDir, Path.GetFileName(dir));
             CopyDirectory(dir, dest);
         }
     }
@@ -105,7 +108,8 @@ public class UpdateService
             var oldDirectory = Path.Combine(directory, NameRules.SanitizeForPath(champion.Name));
             var newDirectory = Path.Combine(directory, champion.Id.ToString());
 
-            if (Directory.Exists(oldDirectory) && !string.Equals(oldDirectory, newDirectory, StringComparison.OrdinalIgnoreCase))
+            if (Directory.Exists(oldDirectory) &&
+                !string.Equals(oldDirectory, newDirectory, StringComparison.OrdinalIgnoreCase))
                 Directory.Move(oldDirectory, newDirectory);
 
             foreach (var skin in champion.Skins.Skip(1))
@@ -126,11 +130,11 @@ public class UpdateService
                     var chromaFolderName = NameRules.SanitizeForPath(chroma.Name);
 
                     var chromaPath = Path.Combine(newDirectory, "chromas", chromaFolderName);
-                    if (Directory.Exists(chromaPath) == false) continue;
+                    if (!Directory.Exists(chromaPath)) continue;
 
                     var file = Directory.GetFiles(chromaPath).FirstOrDefault(x => x.Contains(chroma.Id.ToString()));
 
-                    if (File.Exists(file) == false) continue;
+                    if (!File.Exists(file)) continue;
 
 
                     skinId = Convert.ToInt32(
@@ -179,5 +183,4 @@ public class UpdateService
             return s;
         }
     }
-
 }

@@ -1,13 +1,13 @@
-﻿using Microsoft.AspNetCore.SignalR;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
+using Microsoft.AspNetCore.SignalR;
 using WebApplication1.Models;
 
 namespace WebApplication1.Hubs;
 
 public class LobbyHub : Hub
 {
-    private static ConcurrentDictionary<string, Lobby> _lobbies = new();
-    private static ConcurrentDictionary<string, string> _memberLobbyMap = new();
+    private static readonly ConcurrentDictionary<string, Lobby> _lobbies = new();
+    private static readonly ConcurrentDictionary<string, string> _memberLobbyMap = new();
 
     public async Task CreateLobby(string lobbyId, string puuid)
     {
@@ -65,9 +65,7 @@ public class LobbyHub : Hub
         {
             var sender = lobby.Members.FirstOrDefault(x => x.ConnectionId == Context.ConnectionId);
             if (sender != null)
-            {
                 await Clients.Group(lobbyId).SendAsync("ReceiveMessage", lobbyId, sender.Puuid, message);
-            }
         }
     }
 
@@ -94,10 +92,7 @@ public class LobbyHub : Hub
 
     public async Task<List<LobbyMember>> GetLobbyMembers(string lobbyId)
     {
-        if (_lobbies.TryGetValue(lobbyId, out var lobby))
-        {
-            return lobby.Members;
-        }
+        if (_lobbies.TryGetValue(lobbyId, out var lobby)) return lobby.Members;
 
         return new List<LobbyMember>();
     }

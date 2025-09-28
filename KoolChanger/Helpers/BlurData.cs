@@ -12,6 +12,7 @@ internal enum AccentState
     ACCENT_ENABLE_ACRYLICBLURBEHIND = 4,
     ACCENT_INVALID_STATE = 5
 }
+
 [StructLayout(LayoutKind.Sequential)]
 internal struct AccentPolicy
 {
@@ -28,6 +29,7 @@ internal struct WindowCompositionAttributeData
     public nint Data;
     public int SizeOfData;
 }
+
 internal enum WindowCompositionAttribute
 {
     WCA_ACCENT_POLICY = 19

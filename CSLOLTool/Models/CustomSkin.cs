@@ -13,8 +13,10 @@ public class CustomSkin
         if (obj is null || obj is not CustomSkin customSkin)
             return false;
 
-        return (customSkin.Author, customSkin.Description, customSkin.Name, customSkin.Version) == (Author, Description, Name, Version);
+        return (customSkin.Author, customSkin.Description, customSkin.Name, customSkin.Version) ==
+               (Author, Description, Name, Version);
     }
+
     public override int GetHashCode()
     {
         var skin = Version + Name + Author;

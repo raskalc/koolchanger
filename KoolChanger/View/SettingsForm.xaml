@@ -16,19 +16,19 @@
 
     <Window.Resources>
         <Style x:Key="MaterialPurpleButton" TargetType="Button">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="#f5dbff"/>
-            <Setter Property="BorderBrush" Value="#f5dbff"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="FontFamily" Value="Segoe UI"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="FontWeight" Value="Medium"/>
-            <Setter Property="Padding" Value="16 8"/>
-            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="#f5dbff" />
+            <Setter Property="BorderBrush" Value="#f5dbff" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="FontFamily" Value="Segoe UI" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontWeight" Value="Medium" />
+            <Setter Property="Padding" Value="16 8" />
+            <Setter Property="Cursor" Value="Hand" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border x:Name="border" 
+                        <Border x:Name="border"
                                 Background="#66000000"
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}"
@@ -37,20 +37,20 @@
                                 <Border x:Name="RippleEffect"
                                         Background="#20f5dbff"
                                         Opacity="0"
-                                        CornerRadius="4"/>
+                                        CornerRadius="4" />
                                 <ContentPresenter HorizontalAlignment="Center"
                                                   VerticalAlignment="Center"
-                                                  RecognizesAccessKey="True"/>
+                                                  RecognizesAccessKey="True" />
                             </Grid>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="border" Property="Background" Value="#10f5dbff"/>
-                                <Setter TargetName="border" Property="BorderBrush" Value="#f5dbff"/>
+                                <Setter TargetName="border" Property="Background" Value="#10f5dbff" />
+                                <Setter TargetName="border" Property="BorderBrush" Value="#f5dbff" />
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="RippleEffect" Property="Opacity" Value="1"/>
-                                <Setter TargetName="RippleEffect" Property="Background" Value="#30f5dbff"/>
+                                <Setter TargetName="RippleEffect" Property="Opacity" Value="1" />
+                                <Setter TargetName="RippleEffect" Property="Background" Value="#30f5dbff" />
                             </Trigger>
                             <EventTrigger RoutedEvent="Button.Click">
                                 <BeginStoryboard>
@@ -58,7 +58,7 @@
                                         <DoubleAnimation Storyboard.TargetName="RippleEffect"
                                                          Storyboard.TargetProperty="Opacity"
                                                          From="0.3" To="0"
-                                                         Duration="0:0:0.5"/>
+                                                         Duration="0:0:0.5" />
                                     </Storyboard>
                                 </BeginStoryboard>
                             </EventTrigger>
@@ -74,16 +74,16 @@
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                 <Button Content="Select game folder" Width="200" Height="40" Margin="0,0,0,10"
                         Click="SelectGameFolder"
-                        Style="{StaticResource MaterialPurpleButton}"/>
+                        Style="{StaticResource MaterialPurpleButton}" />
                 <Button Content="Get champions data" Width="200" Height="40" Margin="0,0,0,10"
                         Click="GetChampionData"
-                        Style="{StaticResource MaterialPurpleButton}"/>
+                        Style="{StaticResource MaterialPurpleButton}" />
                 <Button Content="Download Skins" Width="200" Height="40" Margin="0,0,0,10"
                         Click="DownloadSkins"
-                        Style="{StaticResource MaterialPurpleButton}"/>
+                        Style="{StaticResource MaterialPurpleButton}" />
                 <Button Content="Download skins preview" Width="200" Height="40" Margin="0,0,0,10"
                         Click="DownloadSkinsPreview"
-                        Style="{StaticResource MaterialPurpleButton}"/>
+                        Style="{StaticResource MaterialPurpleButton}" />
             </StackPanel>
 
 
@@ -108,14 +108,16 @@
                                 <Trigger.EnterActions>
                                     <BeginStoryboard>
                                         <Storyboard>
-                                            <DoubleAnimation Storyboard.TargetProperty="Width" To="25" Duration="0:0:0.2" />
+                                            <DoubleAnimation Storyboard.TargetProperty="Width" To="25"
+                                                             Duration="0:0:0.2" />
                                         </Storyboard>
                                     </BeginStoryboard>
                                 </Trigger.EnterActions>
                                 <Trigger.ExitActions>
                                     <BeginStoryboard>
                                         <Storyboard>
-                                            <DoubleAnimation Storyboard.TargetProperty="Width" To="20" Duration="0:0:0.2" />
+                                            <DoubleAnimation Storyboard.TargetProperty="Width" To="20"
+                                                             Duration="0:0:0.2" />
                                         </Storyboard>
                                     </BeginStoryboard>
                                 </Trigger.ExitActions>

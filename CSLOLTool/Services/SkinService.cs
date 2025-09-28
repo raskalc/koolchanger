@@ -1,20 +1,26 @@
-﻿using CSLOLTool.Dto;
-using CSLOLTool.Models;
-using System;
-using System.IO.Compression;
+﻿using System.IO.Compression;
 using System.Text.Json;
-using System.Xml.Linq;
+using CSLOLTool.Dto;
+using CSLOLTool.Models;
 
 namespace CSLOLTool.Services;
 
 public class SkinService
 {
-    private readonly string _championsInfoEndpoint = "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champions/";
-    private readonly string _splashArtEndpoint = "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/characters/";
-    private readonly string _chromaEndpoint = "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-chroma-images/";
+    private readonly string _championsInfoEndpoint =
+        "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champions/";
+
+    private readonly string _chromaEndpoint =
+        "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-chroma-images/";
+
+    private readonly HttpClient _httpClient = new();
+
+    private readonly string _splashArtEndpoint =
+        "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/characters/";
+
     public event Action<string>? OnDownloaded;
     public event Action<string>? OnError;
-    private readonly HttpClient _httpClient = new HttpClient();
+
     public SkinFromFileInfo? GetModInfoFromZip(string zipPath)
     {
         if (!File.Exists(zipPath))
@@ -32,9 +38,10 @@ public class SkinService
         var modInfo = JsonSerializer.Deserialize<SkinFromFileInfo>(json);
         return modInfo;
     }
+
     public async Task<List<Skin>> GetSkinsAsync(int championId)
     {
-        string json = await _httpClient.GetStringAsync(_championsInfoEndpoint + $"/{championId}.json");
+        var json = await _httpClient.GetStringAsync(_championsInfoEndpoint + $"/{championId}.json");
 
         using var document = JsonDocument.Parse(json);
         var root = document.RootElement;
@@ -43,13 +50,13 @@ public class SkinService
 
         if (root.TryGetProperty("skins", out var skinsElement))
         {
-            string prefix = "/lol-game-data/assets/ASSETS/Characters/";
+            var prefix = "/lol-game-data/assets/ASSETS/Characters/";
 
             foreach (var skinElement in skinsElement.EnumerateArray())
             {
-                int id = skinElement.GetProperty("id").GetInt32();
-                string name = skinElement.GetProperty("name").GetString() ?? "Unknown";
-                string loadScreenPath = skinElement.GetProperty("loadScreenPath").GetString() ?? "";
+                var id = skinElement.GetProperty("id").GetInt32();
+                var name = skinElement.GetProperty("name").GetString() ?? "Unknown";
+                var loadScreenPath = skinElement.GetProperty("loadScreenPath").GetString() ?? "";
 
                 var imageUrl = loadScreenPath.StartsWith(prefix)
                     ? loadScreenPath.Substring(prefix.Length).ToLower()
@@ -63,7 +70,6 @@ public class SkinService
                 };
 
                 if (skinElement.TryGetProperty("chromas", out var chromasElement))
-                {
                     foreach (var chromaElement in chromasElement.EnumerateArray())
                     {
                         var chromaId = chromaElement.GetProperty("id").GetInt32();
@@ -79,7 +85,6 @@ public class SkinService
 
                         skin.Chromas.Add(chroma);
                     }
-                }
 
                 //if (skinElement.TryGetProperty("questSkinInfo", out var questSkinInfo) &&
                 //    questSkinInfo.TryGetProperty("tiers", out var tiersElement))
@@ -106,6 +111,7 @@ public class SkinService
 
         return skins;
     }
+
     public async Task<List<Champion>> GetAllSkinsAsync(List<Champion> champions)
     {
         var semaphore = new SemaphoreSlim(50);
@@ -136,5 +142,4 @@ public class SkinService
         await Task.WhenAll(tasks);
         return champions;
     }
-
 }

@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:KoolChanger"
         xmlns:gif="http://wpfanimatedgif.codeplex.com"
         mc:Ignorable="d"
         AllowsTransparency="True"
@@ -18,8 +17,9 @@
             BorderThickness="0">
         <Grid>
             <Label Margin="10" Foreground="#f5dbff" VerticalAlignment="Top" HorizontalAlignment="Center">Loading, please wait</Label>
-            <Image gif:ImageBehavior.AnimatedSource="/assets/loading.gif" Width="100"/>
-            <Label Margin="10" Foreground="#f5dbff" VerticalAlignment="Bottom" HorizontalAlignment="Center" x:Name="StatusLabel"></Label>
+            <Image gif:ImageBehavior.AnimatedSource="/assets/loading.gif" Width="100" />
+            <Label Margin="10" Foreground="#f5dbff" VerticalAlignment="Bottom" HorizontalAlignment="Center"
+                   x:Name="StatusLabel" />
         </Grid>
     </Border>
 </Window>
