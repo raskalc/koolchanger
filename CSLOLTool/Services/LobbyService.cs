@@ -7,7 +7,7 @@ namespace CSLOLTool.Services;
 
 public class LobbyService
 {
-    private readonly string _url = "https://mrekk.ru/lobbyhub";
+    private readonly string _url = "https://mrekk.ru/lobbgit yhub";
 
     public HubConnection CreateConnection()
     {
